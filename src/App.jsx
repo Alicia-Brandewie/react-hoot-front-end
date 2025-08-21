@@ -9,6 +9,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import HootList from './components/HootList/HootList';
 import HootDetails from './components/HootDetails/HootDetails';
 import HootForm from './components/HootForm/HootForm';
+import CommentForm from './components/CommentForm/CommentForm';
 
 import { UserContext } from './contexts/UserContext';
 import * as hootService from './services/hootService';
@@ -43,7 +44,12 @@ const App = () => {
     navigate('/hoots');
   };
 
-
+ 
+const handleUpdateHoot = async (hootId, hootFormData) => {
+  const updatedHoot = await hootService.update(hootId, hootFormData);
+  setHoots(hoots.map((hoot) => (hootId === hoot._id ? updatedHoot : hoot)));
+  navigate(`/hoots/${hootId}`);
+};
 
   return (
     <>
@@ -56,6 +62,10 @@ const App = () => {
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
             <Route path='/hoots/:hootId' element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
             <Route path='/hoots/new' element={<HootForm handleAddHoot={handleAddHoot} />} />
+            <Route path='/hoots/:hootId/edit' element={<HootForm handleUpdateHoot={handleUpdateHoot}/>}    />
+            <Route path='/hoots/:hootId/commens/:commentsId/edit' element={<CommentForm 
+            />}    />
+            
           </>
         ) : (
           <>

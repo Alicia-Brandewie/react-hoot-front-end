@@ -1,10 +1,11 @@
 import { Link } from 'react-router';
+import styles from './HootList.module.css';
 
 
 const HootList = (props) => {
   return (
-    <main>
-        {props.hoots.map((hoot) =>  (
+    <main className={styles.container}>
+      {props.hoots.map((hoot) => (
         <Link key={hoot._id} to={`/hoots/${hoot._id}`}>
           <article>
             <header>
@@ -19,7 +20,7 @@ const HootList = (props) => {
         </Link>
       ))}
     </main>
-    );
+  );
 };
 
 export default HootList;
