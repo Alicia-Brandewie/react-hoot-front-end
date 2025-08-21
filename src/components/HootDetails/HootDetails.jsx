@@ -1,12 +1,16 @@
 import { useParams } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import * as hootService from '../../services/hootService';
 import CommentForm from '../CommentForm/CommentForm';
+import { UserContext } from '../../contexts/UserContext';
+// import { preprocessCSS } from 'vite';
 
 
-const HootDetails = () => {
+
+const HootDetails = (props) => {
     const [hoot, setHoot] = useState(null);
     const { hootId } = useParams();
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         const fetchHoot = async () => {
@@ -30,18 +34,24 @@ const HootDetails = () => {
             <section>
                 <header>
                     <p>{hoot.category.toUpperCase()}</p>
-                        <h1>{hoot.title}</h1>
+                    <h1>{hoot.title}</h1>
                     <p>
                         {`${hoot.author.username} posted on
                         ${new Date(hoot.createdAt).toLocaleDateString()}`}
                     </p>
+                    {hoot.author._id === user._id && (
+                        <>
+                            <button onClick={() => props.handleDeleteHoot(hootId)}>
+                            Delete</button>
+                        </>
+                    )}
                 </header>
-                    <p>{hoot.text}</p>
+                <p>{hoot.text}</p>
             </section>
-            
+
             <section>
                 <h2>Comments</h2>
-                <CommentForm handleAddComment={handleAddComment}/>
+                <CommentForm handleAddComment={handleAddComment} />
 
                 {!hoot.comments.length && <p>There are no comments.</p>}
 
